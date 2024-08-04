@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人主页</title>
+    <style>
+        body {
+            background-color: #ff4c4c; /* Initial red background */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        .hide {
+            display: none;
+        }
+        .button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #555;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+        #copyButton {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #copyButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="content-container">
+        <h1>你好</h1>
+        <p>欢迎来到我的个人主页！我会在这里分享Python代码，LUA代码，还有C语言或C++代码也会试试的😨</p>
+        <button class="button" onclick="toggleContent()">点击取消背景和文字</button>
+        <button class="button" onclick="showModal('luaModal')">Lua 示例</button>
+    </div>
+
+    <!-- Lua Modal -->
+    <div id="luaModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('luaModal')">&times;</span>
+            <h2>Lua 示例代码</h2>
+            <pre id="luaCode">
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Camera = game.Workspace.CurrentCamera
+
+local function displayNotification()
+    local playerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+    local notificationGui = Instance.new("ScreenGui")
+    notificationGui.Name = "NotificationGui"
+    notificationGui.Parent = playerGui
+
+    local notificationLabel = Instance.new("TextLabel")
+    notificationLabel.Size = UDim2.new(0.3, 0, 0.1, 0)
+    notificationLabel.Position = UDim2.new(0.35, 0, 0.05, 0)
+    notificationLabel.BackgroundColor3 = Color3.new(0, 0, 0)
+    notificationLabel.TextColor3 = Color3.new(1, 1, 1)
+    notificationLabel.TextScaled = true
+    notificationLabel.Text = "透视\n作者QQ号:647478884"
+    notificationLabel.Parent = notificationGui
+
+    game:GetService("Debris"):AddItem(notificationGui, 5)
+end
+
+local function createESP(player)
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    local billboardGui = Instance.new("BillboardGui")
+    billboardGui.Name = "PlayerESP"
+    billboardGui.Size = UDim2.new(0, 200, 0, 100) -- Adjusted size for health and distance
+    billboardGui.Adornee = character:WaitForChild("Head")
+    billboardGui.AlwaysOnTop = true
+
+    local nameLabel = Instance.new("TextLabel")
+    nameLabel.Size = UDim2.new(1, 0, 0.4, 0)
+    nameLabel.Position = UDim2.new(0, 0, 0, 0)
+    nameLabel.BackgroundTransparency = 1
+    nameLabel.TextColor3 = Color3.new(1, 0, 0)
+    nameLabel.TextStrokeTransparency = 0
+    nameLabel.TextStrokeColor3 = Color3.new(1, 0.84, 0)
+    nameLabel.Font = Enum.Font.SourceSansBold
+    nameLabel.Parent = billboardGui
+
+    local healthLabel = Instance.new("TextLabel")
+    healthLabel.Size = UDim2.new(1, 0, 0.2, 0)
+    healthLabel.Position = UDim2.new(0, 0, 0.5, 0)
+    healthLabel.BackgroundTransparency = 1
+    healthLabel.TextColor3 = Color3.new(1, 0, 0)
+    healthLabel.TextStrokeTransparency = 0
+    healthLabel.TextStrokeColor3 = Color3.new(1, 0.84, 0)
+    healthLabel.Font = Enum.Font.SourceSansBold
+    healthLabel.Parent = billboardGui
+
+    local distanceLabel = Instance.new("TextLabel")
+    distanceLabel.Size = UDim2.new(1, 0, 0.2, 0)
+    distanceLabel.Position = UDim2.new(0, 0, 0.7, 0)
+    distanceLabel.BackgroundTransparency = 1
+    distanceLabel.TextColor3 = Color3.new(1, 0, 0)
+    distanceLabel.TextStrokeTransparency = 0
+    distanceLabel.TextStrokeColor3 = Color3.new(1, 0.84, 0)
+    distanceLabel.Font = Enum.Font.SourceSansBold
+    distanceLabel.Parent = billboardGui
+
+    billboardGui.Parent = character:WaitForChild("Head")
+
+    local highlight = Instance.new("Highlight")
+    highlight.Adornee = character
+    highlight.FillColor = Color3.new(1, 0, 0)
+    highlight.FillTransparency = 0.5
+    highlight.OutlineColor = Color3.new(1, 1, 1)
+    highlight.OutlineTransparency = 0.5
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    highlight.Parent = character
+
+    local function updateESP()
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            healthLabel.Text = string.format("生命值: %.0f/%.0f", humanoid.Health, humanoid.MaxHealth)
+        end
+
+        local distance = (Camera.CFrame.Position - character:WaitForChild("HumanoidRootPart").Position).Magnitude
+        distanceLabel.Text = string.format("距离: %.0f 米", distance)
+
+        local fontSize = math.clamp(100 / distance, 10, 36) -- Adjust font size based on distance
+        nameLabel.TextSize = fontSize
+        healthLabel.TextSize = fontSize
+        distanceLabel.TextSize = fontSize
+
+        nameLabel.Text = player.Name .. "\n" .. (player.Team and player.Team.Name or "No Team")
+    end
+
+    character:WaitForChild("Humanoid").HealthChanged:Connect(updateESP)
+    game:GetService("RunService").RenderStepped:Connect(updateESP)
+end
+
+local function onCharacterAdded(character)
+    local player = Players:GetPlayerFromCharacter(character)
+    if player and player ~= LocalPlayer then
+        createESP(player)
+    end
+end
+
+local function onPlayerAdded(player)
+    player.CharacterAdded:Connect(onCharacterAdded)
+    if player.Character then
+        onCharacterAdded(player.Character)
+    end
+end
+
+Players.PlayerAdded:Connect(onPlayerAdded)
+for _, player in pairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        onPlayerAdded(player)
+    end
+end
+
+displayNotification()
+            </pre>
+            <button id="copyButton" onclick="copyCode()">复制代码</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent() {
+            const container = document.getElementById('content-container');
+            if (container.classList.contains('
